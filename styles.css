@@ -18,7 +18,7 @@ body{
     border-color: #ccc;
 
 
-    box-shadow: 2px 2px 2px #ccc;
+    box-shadow: 2px 2px 2px #ccc;                  /*     */
 
 }
 /* 棋盘；背景，大小*/
@@ -27,5 +27,21 @@ body{
     width: 1.5em;
     height: 1.5em;
 
+    border-style: outset; /*边界样式 */
+
+    text-align: center;
+
+    user-select: none;
+
     text-align: center;  /* 数字中对齐*/
+
+    user-select: none;/*  不做光标选择   */
+}
+
+
+/*  对棋盘格状态的清空（单机，点下）   */
+.clear {
+    border-style: solid;  /*  清空后边界的格式   */
+    border-color: #eee;/*  清空后边界颜色   */
+    background-color: #eee;/*  清空后背景颜色   */
 }
