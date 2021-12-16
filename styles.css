@@ -45,3 +45,20 @@ body{
     border-color: #eee;/*  清空后边界颜色   */
     background-color: #eee;/*  清空后背景颜色   */
 }
+
+
+ /*  点到雷的地方变成红   */
+.cell.landmine.exploded {
+    background-color: red;
+}
+
+/*  其他雷变成橙色   */
+.cell.landmine {
+    background-color: orange;
+}
+
+
+/*  成功   */
+.cell.landmine.success {
+    background-color: green;
+}

@@ -9,35 +9,39 @@ function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘�
             let cellEl =document.createElement("div");//在cellEl中创建div，雷都位置
 
             cellEl.className = "cell";//为cellEl指定样式
-            cellEl.innerText = grid[i][j].count; //cellEl中填写count值
+            //cellEl.innerText = grid[i][j].count; //cellEl中填写count值
 
             grid[i][j].cellEl = cellEl; //将cellEl也加入grid对象
 
 
 
-            if ( grid[i][j].count === -1) {  //雷用*表示
-                cellEl.innerText = "*";    
-                } else {
-
-                    cellEl.innerText = grid[i][j].count; //不是雷还用数字
-                }
-
+            //if ( grid[i][j].count === -1) {  //雷用*表示
+            //    cellEl.innerText = "*";    
+            //} else {
+//////
+            //  cellEl.innerText = grid[i][j].count; //不是雷还用数字
+            //}
+//////
 
             cellEl.addEventListener("click", (e)=> { // 对棋盘格进行点击，实现切换状态，(e)=>之后为要响应的点击事件
-                if (grid[i][j].count === -1) { //
+                if (grid[i][j].count === -1) { //若count=-1则触雷，调explode函数
                     explode(grid, i, j, numRows, numCols)
+
                     return;
                 }
 
                 if (grid[i][j].count === 0 ) {  //如果count为0，则要周边搜索，并展开不为雷的棋盘格
                     searchClearArea(grid, i, j, numRows, numCols); //找安全区域，i，j起始（调searchClearArea函数）
-                } else if (grid[i][j].count > 0) {
-                    grid[i][j].clear = true;
-                    cellEl.classList.add("clear");
-                    grid[i][j].cellEl.innerText = grid[i][j].count;
-                }
+                } else if (grid[i][j].count > 0) { //如果count大于0，
+                    grid[i][j].clear = true; //赋值true
+                    cellEl.classList.add("clear"); //并使该棋盘格clear
 
-            cellEl.classList.add("clear");  //将棋盘格翻开
+
+                    grid[i][j].cellEl.innerText = grid[i][j].count; //将该count值直接赋予该棋盘格
+                }
+                checkAllClear(grid);
+
+            //cellEl.classList.add("clear");  //将棋盘格翻开
             });    
 
 
@@ -133,10 +137,7 @@ function initialize(numRows, numCols,numMines) {  //初始化，对棋盘格赋�
     return grid; //返回对象，并将grid参数传给rederBoard去绘制
 }
 
-let grid =  initialize(10,10,15); //设置长，宽，雷数
 
-
-rederBoard(10,10,grid);//参数；长宽,初始化置零（count值：0没雷，-1有雷，大于0表示有几个雷）
 
 function searchClearArea(grid, row, col, numRows, numCols) { // 搜索周边的函数，将grid, row, col, numRows, numCols参数全部传进去
     let gridCell = grid[row][col];
@@ -165,12 +166,76 @@ function searchClearArea(grid, row, col, numRows, numCols) { // 搜索周边的�
             if (gridCell.count === 0) { //count为0即安全，可以继续搜索
                 searchClearArea(grid, cellRow, cellCol, numRows, numCols); // 遍历区域
             } else if (gridCell.count > 0) {
-                gridCell.cellEl.innerText = gridCell.count;
+                gridCell.cellEl.innerText = gridCell.count;//若不为0，则clear后要显示
             }
 
         }
     }
 }
+
+//触雷机制
+function explode(grid, row, col, numRows, numCols) { //先传参数
+    grid[row][col].cellEl.classList.add("exploded");//加一个属性
+
+    for (let cellRow = 0; cellRow < numRows; cellRow++) {
+        for (let cellCol = 0; cellCol < numCols; cellCol++) {
+
+            let cell =  grid[cellRow][cellCol];//增加一个属性   
+           
+
+            cell.clear = true;
+            cell.cellEl.classList.add('clear'); //将所有棋盘格clear
+            
+            
+            if (cell.count === -1) {
+                cell.cellEl.classList.add('landmine'); // 将为雷的地方标记为landmine（类）
+            
+            }
+            
+        }
+    }
+    
+
+}
+
+
+
+function checkAllClear(grid) {
+    for (let row = 0; row < grid.length; row ++) {
+        let gridRow = grid[row];
+        for (let col = 0; col < gridRow.length; col ++) {
+            let cell = gridRow[col];
+            if (cell.count !== -1 && !cell.clear) {
+                return false;
+            }
+        }
+    }
+
+    for (let row = 0; row < grid.length; row ++) {
+        let gridRow = grid[row];
+        for (let col = 0; col < gridRow.length; col ++) {
+            let cell = gridRow[col];
+
+            if (cell.count === -1) {
+                cell.cellEl.classList.add('landmine');
+            }
+
+            cell.cellEl.classList.add("success");
+
+            
+        }
+    }
+
+    return true;
+}
+
+
+
+
+let grid =  initialize(10,10,15); //设置长，宽，雷数
+
+
+rederBoard(10,10,grid);//参数；长宽,初始化置零（count值：0没雷，-1有雷，大于0表示有几个雷）
 
 //打印：  mine该棋盘格周边雷数  target该位置没雷  danger!该位置有雷
 
