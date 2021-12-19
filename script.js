@@ -18,16 +18,18 @@ function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘�
             //if ( grid[i][j].count === -1) {  //雷用*表示
             //    cellEl.innerText = "*";    
             //} else {
-//////
+//////////
             //  cellEl.innerText = grid[i][j].count; //不是雷还用数字
             //}
-//////
+//////////
 
             cellEl.addEventListener("click", (e)=> { // 对棋盘格进行点击，实现切换状态，(e)=>之后为要响应的点击事件
                 if (grid[i][j].count === -1) { //若count=-1则触雷，调explode函数
                     explode(grid, i, j, numRows, numCols)
+                    
 
                     return;
+                    
                 }
 
                 if (grid[i][j].count === 0 ) {  //如果count为0，则要周边搜索，并展开不为雷的棋盘格
@@ -40,6 +42,8 @@ function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘�
                     grid[i][j].cellEl.innerText = grid[i][j].count; //将该count值直接赋予该棋盘格
                 }
                 checkAllClear(grid);
+                
+
 
             //cellEl.classList.add("clear");  //将棋盘格翻开
             });    
@@ -189,13 +193,13 @@ function explode(grid, row, col, numRows, numCols) { //先传参数
             
             if (cell.count === -1) {
                 cell.cellEl.classList.add('landmine'); // 将为雷的地方标记为landmine（类）
-            
+                
             }
             
         }
     }
     
-
+    alert('游戏失败');
 }
 
 
@@ -221,13 +225,17 @@ function checkAllClear(grid) {
             }
 
             cell.cellEl.classList.add("success");
+            
 
             
         }
     }
-
+    alert('恭喜你，游戏通过');
     return true;
+    
 }
+
+
 
 
 
