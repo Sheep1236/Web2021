@@ -1,4 +1,4 @@
-function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘格初始化置零
+function renderBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘格初始化置零
 
     let boardEl = document.querySelector("#board");
     
@@ -18,10 +18,10 @@ function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘�
             //if ( grid[i][j].count === -1) {  //雷用*表示
             //    cellEl.innerText = "*";    
             //} else {
-//////////
+
             //  cellEl.innerText = grid[i][j].count; //不是雷还用数字
             //}
-//////////
+
 
             cellEl.addEventListener("click", (e)=> { // 对棋盘格进行点击，实现切换状态，(e)=>之后为要响应的点击事件
                 if (grid[i][j].count === -1) { //若count=-1则触雷，调explode函数
@@ -39,6 +39,9 @@ function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘�
                     cellEl.classList.add("clear"); //并使该棋盘格clear
 
 
+                   
+
+
                     grid[i][j].cellEl.innerText = grid[i][j].count; //将该count值直接赋予该棋盘格
                 }
                 checkAllClear(grid);
@@ -46,9 +49,36 @@ function rederBoard(numRows,numCols,grid){ //定义棋盘长宽的函数,棋盘�
 
 
             //cellEl.classList.add("clear");  //将棋盘格翻开
-            });    
+            });   
+            
+            
+            //右键插旗
+            document.oncontextmenu = function(e){
+                return false;
+            }
+            
+            
+            cellEl.addEventListener("mousedown", (e)=> {
+                if (e.button == 2 && grid[i][j].clear == false ){
+                    grid[i][j].cellEl.classList.add('flag');
+                    grid[i][j].flag = true;
 
+                }else if(e.button == 2 && grid[i][j].clear == false ){
 
+                   grid[i][j].cellEl.classList.remove('flag');
+
+                   grid[i][j].flag = false;
+                }
+            });
+            
+             
+            cellEl.addEventListener("mouseup", (e)=> {
+                if (e.button == 2 && grid[i][j].clear == false ){//
+                    grid[i][j].cellEl.classList.remove('flag');//
+                    grid[i][j].flag = false;
+                }
+            });
+//
             let tdEl = document.createElement("td"); //创建td（列）
 
             
@@ -237,13 +267,36 @@ function checkAllClear(grid) {
 
 
 
+function easy(){
+    document.getElementById("board").innerHTML=""; //根据id找到表格 innerHTML="" 每次执行前清空表格
+    let  grid = initialize(10, 10, 15);
+    renderBoard(10, 10, grid);
+}
+
+function normal(){
+    document.getElementById("board").innerHTML="";
+    let grid = initialize(15,15,40);
+    renderBoard(15, 15, grid);
+}
+
+function hard(){
+    document.getElementById("board").innerHTML="";
+    let grid = initialize(20, 20, 80);
+    renderBoard(20, 20, grid);
+}
+
+
+
+
+
+
 
 
 
 let grid =  initialize(10,10,15); //设置长，宽，雷数
 
 
-rederBoard(10,10,grid);//参数；长宽,初始化置零（count值：0没雷，-1有雷，大于0表示有几个雷）
+renderBoard(10,10,grid);//参数；长宽,初始化置零（count值：0没雷，-1有雷，大于0表示有几个雷）
 
 //打印：  mine该棋盘格周边雷数  target该位置没雷  danger!该位置有雷
 

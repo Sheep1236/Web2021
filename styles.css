@@ -85,3 +85,8 @@ body{
 }
 
 
+
+.flag {
+    background: #ccc url(flag.png) no-repeat center;
+    background-size: cover;
+}
